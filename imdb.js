@@ -51,6 +51,7 @@ const convertImdbMovieToMovie = imdbMovieData => {
     genres: imdbMovieData.metadata.genres,
     metascore: imdbMovieData.ratings.metascore,
     imdbRating: imdbMovieData.ratings.rating,
+    poster: imdbMovieData.poster.url,
   });
 }
 

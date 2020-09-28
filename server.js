@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const cors = require("cors");
 const { fetchImdbWatchList } = require("./imdb");
@@ -8,10 +9,15 @@ const { movieData, viewingOptionData } = require("./models");
 
 const app = express();
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/api/movies", (req, res) => {
+app.get("/", (req, res) => {
 	const userId = req.query.userId || 'ur39373174';
 	fetchImdbWatchList(userId).then(list => {
 		Promise.all(list['movies'].map(
@@ -19,7 +25,8 @@ app.get("/api/movies", (req, res) => {
 		.then(justwatchlist => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
 			console.log(listWithViewingOptions)
-			res.json({ listWithViewingOptions });
+			// res.json({ listWithViewingOptions });
+			res.render('index', { movies: listWithViewingOptions })
 	})
 	});
 });
@@ -37,7 +44,8 @@ const fetchMovieDetails = movie =>
 				year: movie.year,
 				viewingOptions: JustWatchData,
 				runtime: movie.runTime,
-				metascore: movie.ratings.metascore
+				metascore: movie.ratings.metascore,
+				poster: movie.poster,
 			}
 		})
 		.catch(error => {
