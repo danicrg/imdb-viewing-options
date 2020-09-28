@@ -60,9 +60,9 @@ const calculateMovieRunTime = (imdbMovieData) => {
   return runTimeInSeconds ? runTimeInSeconds / 60 : null;
 };
 
-fetchImdbWatchList('ur39373174').then(result => {
-  // console.log(result)
-  return
-});
+// fetchImdbWatchList('ur39373174').then(result => {
+//   // console.log(result)
+//   return
+// });
 
 module.exports = {fetchImdbWatchList}

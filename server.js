@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 			movie => fetchMovieDetails(movie)))
 		.then(justwatchlist => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
-			console.log(listWithViewingOptions)
+			// console.log(listWithViewingOptions)
 			// res.json({ listWithViewingOptions });
 			res.render('index', { movies: listWithViewingOptions })
 	})
