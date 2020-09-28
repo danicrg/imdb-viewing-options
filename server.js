@@ -46,6 +46,7 @@ const fetchMovieDetails = movie =>
 				runtime: movie.runTime,
 				metascore: movie.ratings.metascore,
 				poster: movie.poster,
+				url: movie.imdbUrl,
 			}
 		})
 		.catch(error => {

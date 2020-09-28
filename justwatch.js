@@ -29,9 +29,9 @@ const justwatchType = (itemType) => {
 };
 
 const justWatchProviders = {
-  8: 'netflix',
-  119: 'amazon',
-  27: 'hbo',
+  8: 'Netflix',
+  119: 'Amazon Prime',
+  27: 'HBO',
 };
 
 const extractBestViewingOption = (offers) => {

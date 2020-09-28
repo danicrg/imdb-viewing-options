@@ -2,29 +2,25 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="/css/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-<div class="App">
+<!-- <div class="App"> -->
 <div class="MoviesContainer">
 <% if(movies == null){%>
     <p>No films today</p>
 <% }else{ %>
 <% for (var i in movies) { %>
 	<% var movie = movies[i]; %>
-	
-	<div class="Movie">
-		<a class="MovieCellContainer">
+		<a class="MovieCellContainer" href="<%= movie.url%>">
 			<div class="MoviePosterContainer">
 				<img src="<%= movie.poster %>" class="MoviePoster">
 			</div>
 			<div class="MovieInfo">
 				<div class="MovieTitle">
-					<%= movie.title %>
-				</div>
-                <div class="MovieYear">
-					<%= movie.title %>
+					<%= movie.title + ' (' + movie.year + ')'%>
 				</div>
 				<div class="MovieYear">
 					<%= movie.viewingOptions[0] %>
@@ -32,10 +28,9 @@
 				
 			</div>
 		</a>
-	</div>
               
 <% }}%>
 </div>	
-</div>
+<!-- </div> -->
 </body>
 </html>
