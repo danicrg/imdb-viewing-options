@@ -20,21 +20,22 @@ app.use(bodyParser.raw());
 app.use(cors());
 
 app.get("/", (req, res) => {
-	res.render('index', { movies: null })
+	res.render('index', { movies: [] })
 });
 
-app.post("/movies", (req, res) => {
+app.post("/", (req, res) => {
 	const userId = req.body.userId || 'ur39373174';
-	console.log(req.body);
 	fetchImdbWatchList(userId).then(list => {
 		Promise.all(list['movies'].map(
 			movie => fetchMovieDetails(movie)))
 		.then(justwatchlist => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
-			// console.log(listWithViewingOptions)
-			// res.json({ listWithViewingOptions });
+
 			res.render('index', { movies: listWithViewingOptions })
 	})
+	})
+	.catch(err => {
+		res.render('index', { movies: [] })
 	});
 });
 
@@ -54,6 +55,7 @@ const fetchMovieDetails = movie =>
 				metascore: movie.ratings.metascore,
 				poster: movie.poster,
 				url: movie.imdbUrl,
+				certificate: movie.certificate
 			}
 		})
 		.catch(error => {

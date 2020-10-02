@@ -8,17 +8,17 @@
 
 <body>
 <div class="App">
-	<form action="/movies" method="POST">
+	<form action="/" method="POST">
 		<input type="text" class="Search" id="userId" name="userId" placeholder="IMDB user ID"/>
 		<input type="submit" value="Submit" class="Search">
 	</form>
 	
 <div class="MoviesContainer">
-<% if(movies == null){%>
+<% if(movies == []){%>
     <p>No films to show</p>
 <% }else{ %>
 
-<div class="Title">Your Films</div>
+<div class="Title"><%= movies.length %> Films</div>
 
 <% for (var i in movies) { %>
 	<% var movie = movies[i]; %>
@@ -38,6 +38,9 @@
 				</div>
 				<div class="MovieYear">
 					Runtime: <%= movie.runtime %>
+				</div>
+				<div class="MovieYear">
+					Certificate: <%= movie.certificate %>
 				</div>
 				
 			</div>

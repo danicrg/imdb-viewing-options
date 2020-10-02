@@ -4,9 +4,14 @@ const { movieData } = require('./models');
 
 const fetchImdbWatchList = userId =>
   fetch(`http://www.imdb.com/user/${userId}/watchlist?view=detail`)
-    .then(response => response.text())
+    .then(response => {
+      if (response.status !== 200) {
+        throw Error(`IMDB Id ${userId} is not valid.`);
+      }
+
+      return response.text();
+    })
     .then((text) => {
-      console.log(text)
       const initialStateRegex = /IMDbReactInitialState\.push\((\{.+\})\);/g;
       const matches = initialStateRegex.exec(text);
       const initialStateText = matches[1];
@@ -53,6 +58,7 @@ const convertImdbMovieToMovie = imdbMovieData => {
     metascore: imdbMovieData.ratings.metascore,
     imdbRating: imdbMovieData.ratings.rating,
     poster: imdbMovieData.poster.url,
+    certificate: imdbMovieData.metadata.certificate,
   });
 }
 

@@ -11,6 +11,7 @@ const movieData = ({
   metascore,
   rottenTomatoesMeter,
   imdbRating,
+  certificate,
   bechdelRating,
   netflix,
   hbo,
@@ -27,6 +28,7 @@ const movieData = ({
   runTime,
   numberOfEpisodes,
   genres,
+  certificate,
   ratings: {
     metascore,
     rottenTomatoesMeter,

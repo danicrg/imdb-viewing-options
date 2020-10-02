@@ -62,7 +62,6 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
     .then(response => response.json())
     .then((json) => {
       const possibleItem = findBestPossibleJustwatchResult(title, year, type, json.items);
-      
       if (!possibleItem) {
         throw Error(`${imdbId}: ${title} was not found at JustWatch`);
       }
@@ -84,6 +83,7 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
 
           const item = json;
 
+          // console.log(item)
           const offers = item.offers || [];
 
           const viewingOptions = extractBestViewingOption(offers)
