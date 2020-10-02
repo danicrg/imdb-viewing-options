@@ -37,7 +37,7 @@
 					Metascore: <%= movie.metascore %>
 				</div>
 				<div class="MovieYear">
-					Runtime: <%= movie.runtime %>
+					Runtime: <%= Math.floor(movie.runtime / 60)%>h <%= movie.runtime % 60 %>min
 				</div>
 				<div class="MovieYear">
 					Certificate: <%= movie.certificate %>
