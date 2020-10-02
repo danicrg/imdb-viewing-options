@@ -10,12 +10,13 @@ const findBestPossibleJustwatchResult = (title, year, type, results) => {
   }
 
   return results.filter((result) => {
+    
     const titleMatch = leven(result.title.toLowerCase(), title.toLowerCase());
     const yearMatch = result.original_release_year === parseInt(year);
     const titleAndYearMatch = titleMatch === 0 && yearMatch;
-    const fuzzyTitleAndYearMatch = titleMatch <= 10 && yearMatch;
-    const titleMatchesForSeries = titleMatch === 0 && type === 'series';
-    return titleAndYearMatch || fuzzyTitleAndYearMatch || titleMatchesForSeries || yearMatch;
+    const fuzzyTitleAndYearMatch = titleMatch <= 5 && yearMatch;
+    const titleMatchesForSeries = titleMatch === 0 && type === 'series' && result.object_type === 'show';
+    return titleAndYearMatch || fuzzyTitleAndYearMatch || titleMatchesForSeries ;
   })[0];
 };
 
@@ -45,7 +46,8 @@ const extractBestViewingOption = (offers) => {
 };
 
 const fetchJustWatchData = (imdbId, title, type, year) => {
-  return fetch('http://apis.justwatch.com/content/titles/es_ES/popular', {
+
+  return fetch('http://apis.justwatch.com/content/titles/en_US/popular', {
     method: 'POST',
     body: JSON.stringify({
       content_types: [justwatchType(type)],
@@ -60,21 +62,40 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
     .then(response => response.json())
     .then((json) => {
       const possibleItem = findBestPossibleJustwatchResult(title, year, type, json.items);
+      
       if (!possibleItem) {
         throw Error(`${imdbId}: ${title} was not found at JustWatch`);
       }
 
-      const item = possibleItem;
+      const content_type = possibleItem.object_type;
+      const title_id = possibleItem.id;
 
-      const offers = item.offers || [];
 
-      const viewingOptions = extractBestViewingOption(offers)
+      return fetch(`http://apis.justwatch.com/content/titles/${content_type}/${title_id}/locale/es_ES`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(handleErrors)
+        .then(response => response.json())
+        .then((json) => {
 
-      return viewingOptions
+          const item = json;
+
+          const offers = item.offers || [];
+
+          const viewingOptions = extractBestViewingOption(offers)
+
+          return viewingOptions
+
+        });
 
     });
+
 };
 
-// fetchJustWatchData('tt7125860', 'If Beale Street Could Talk', 'film', 1545696000000).then(res => console.log(res))
+// fetchJustWatchData('tt5726616', 'Call Me by Your Name', 'film', 2017).then(res => console.log(res));
 
 module.exports = {fetchJustWatchData}

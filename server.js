@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
 			// console.log(listWithViewingOptions)
 			// res.json({ listWithViewingOptions });
-			res.render('index', { movies: listWithViewingOptions })
+			res.render('movieList', { movies: listWithViewingOptions })
 	})
 	});
 });
