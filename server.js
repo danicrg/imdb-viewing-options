@@ -31,6 +31,10 @@ app.post("/", (req, res) => {
 		.then(justwatchlist => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
 
+			listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
+				return (b.metascore || 0) - (a.metascore || 0)
+			})
+
 			res.render('index', { movies: listWithViewingOptions })
 	})
 	})
