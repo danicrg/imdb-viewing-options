@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: white;
   background-color: black;
   font-family: 'Open Sans', sans-serif;
     max-width: 700px;
@@ -16,21 +17,41 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*INDEX.css*/
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-.MoviesContainer {
+form {
+  margin-top: 20px;
+}
+
+.Search {
+  box-sizing: border-box;
+  text-align: center;
+  width: 90%;
+  background-color: #333131;
+  border-radius: 20px;
   color: white;
+  padding: 0.4em 1em;
+  padding-left: 15px;
+  font-size: 1.5em;
+  border: none;
+  box-shadow: none;
+    &:focus {
+    outline: none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+  }
+}
+
+.MoviesContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.Movie {
+.Title {
   font-size: 1.5em;
   width: 100%;
   font-weight: bolder;

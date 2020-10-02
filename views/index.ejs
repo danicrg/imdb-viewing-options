@@ -8,10 +8,18 @@
 
 <body>
 <div class="App">
+	<form action="/movies" method="POST">
+		<input type="text" class="Search" id="userId" name="userId" placeholder="IMDB user ID"/>
+		<input type="submit" value="Submit" class="Search">
+	</form>
+	
 <div class="MoviesContainer">
 <% if(movies == null){%>
-    <p>No films today</p>
+    <p>No films to show</p>
 <% }else{ %>
+
+<div class="Title">Your Films</div>
+
 <% for (var i in movies) { %>
 	<% var movie = movies[i]; %>
 		<a class="MovieCellContainer" href="<%= movie.url%>">

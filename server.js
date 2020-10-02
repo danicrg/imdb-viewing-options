@@ -14,11 +14,18 @@ app.set('view engine', 'ejs');
 
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.raw());
 app.use(cors());
 
 app.get("/", (req, res) => {
-	const userId = req.query.userId || 'ur39373174';
+	res.render('index', { movies: null })
+});
+
+app.post("/movies", (req, res) => {
+	const userId = req.body.userId || 'ur39373174';
+	console.log(req.body);
 	fetchImdbWatchList(userId).then(list => {
 		Promise.all(list['movies'].map(
 			movie => fetchMovieDetails(movie)))
@@ -26,7 +33,7 @@ app.get("/", (req, res) => {
 			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
 			// console.log(listWithViewingOptions)
 			// res.json({ listWithViewingOptions });
-			res.render('movieList', { movies: listWithViewingOptions })
+			res.render('index', { movies: listWithViewingOptions })
 	})
 	});
 });

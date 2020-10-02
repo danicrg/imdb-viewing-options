@@ -6,6 +6,7 @@ const fetchImdbWatchList = userId =>
   fetch(`http://www.imdb.com/user/${userId}/watchlist?view=detail`)
     .then(response => response.text())
     .then((text) => {
+      console.log(text)
       const initialStateRegex = /IMDbReactInitialState\.push\((\{.+\})\);/g;
       const matches = initialStateRegex.exec(text);
       const initialStateText = matches[1];

@@ -16,7 +16,7 @@ const findBestPossibleJustwatchResult = (title, year, type, results) => {
     const titleAndYearMatch = titleMatch === 0 && yearMatch;
     const fuzzyTitleAndYearMatch = titleMatch <= 5 && yearMatch;
     const titleMatchesForSeries = titleMatch === 0 && type === 'series' && result.object_type === 'show';
-    return titleAndYearMatch || fuzzyTitleAndYearMatch || titleMatchesForSeries ;
+    return titleAndYearMatch || titleMatchesForSeries ;
   })[0];
 };
 
