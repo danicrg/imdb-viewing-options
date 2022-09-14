@@ -34,13 +34,13 @@ const justwatchType = (itemType) => {
 const justWatchProviders = {
   8: 'Netflix',
   // 119: 'Amazon Prime',
-  528: 'Amazon Prime', // US
+  9: 'Amazon Prime',
   //27: 'HBO',
   //63: 'Filmin'
 };
 
 const extractBestViewingOption = (offers) => {
-
+  // console.log(offers)
   const viewingOptionsByProvider = offers.filter(
     offer => justWatchProviders[offer.provider_id] !== undefined && offer.monetization_type === 'flatrate'
   );
@@ -98,6 +98,6 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
 
 };
 
-// fetchJustWatchData('tt5726616', 'Call Me by Your Name', 'film', 2017).then(res => console.log(res));
+// fetchJustWatchData('tt5726616', 'The lord of the rings: the fellowship of the ring', 'film', 2001).then(res => console.log(res));
 
 module.exports = { fetchJustWatchData }
