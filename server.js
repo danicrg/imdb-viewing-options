@@ -28,28 +28,28 @@ app.post("/", (req, res) => {
 	fetchImdbWatchList(userId).then(list => {
 		Promise.all(list['movies'].map(
 			movie => fetchMovieDetails(movie)))
-		.then(justwatchlist => {
-			listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
+			.then(justwatchlist => {
+				listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
 
-			listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
-				return (b.metascore || 0) - (a.metascore || 0)
+				listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
+					return (b.metascore || 0) - (a.metascore || 0)
+				})
+
+				res.render('index', { movies: listWithViewingOptions })
 			})
-
-			res.render('index', { movies: listWithViewingOptions })
 	})
-	})
-	.catch(err => {
-		res.render('index', { movies: [] })
-	});
+		.catch(err => {
+			res.render('index', { movies: [] })
+		});
 });
 
 const fetchMovieDetails = movie =>
 	fetchJustWatchData(
-			movie.id,
-			movie.title,
-			movie.type,
-			movie.year
-		)
+		movie.id,
+		movie.title,
+		movie.type,
+		movie.year
+	)
 		.then(JustWatchData => {
 			return {
 				title: movie.title,
@@ -63,12 +63,10 @@ const fetchMovieDetails = movie =>
 			}
 		})
 		.catch(error => {
-			console.log("Not found in JustWatch: ", movie.title, movie.year);
-			return { viewingOptions: []};
+			// console.log("Not found in JustWatch: ", movie.title, movie.year);
+			console.error(error.message)
+			return { viewingOptions: [] };
 		})
-		.catch(error => {
-			console.error(error);
-		});
 
 // process.env.PORT lets the port be set by Heroku
 const port = process.env.PORT || 8080;

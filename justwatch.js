@@ -3,6 +3,8 @@ const leven = require('leven');
 const { viewingOptionData } = require('./models');
 const { handleErrors } = require('./utils');
 
+var offer_ids = []
+
 const findBestPossibleJustwatchResult = (title, year, type, results) => {
 
   if (!results) {
@@ -10,13 +12,13 @@ const findBestPossibleJustwatchResult = (title, year, type, results) => {
   }
 
   return results.filter((result) => {
-    
+
     const titleMatch = leven(result.title.toLowerCase(), title.toLowerCase());
     const yearMatch = result.original_release_year === parseInt(year);
     const titleAndYearMatch = titleMatch === 0 && yearMatch;
     const fuzzyTitleAndYearMatch = titleMatch <= 5 && yearMatch;
     const titleMatchesForSeries = titleMatch === 0 && type === 'series' && result.object_type === 'show';
-    return titleAndYearMatch || titleMatchesForSeries ;
+    return titleAndYearMatch || titleMatchesForSeries;
   })[0];
 };
 
@@ -31,11 +33,14 @@ const justwatchType = (itemType) => {
 
 const justWatchProviders = {
   8: 'Netflix',
-  119: 'Amazon Prime',
-  27: 'HBO',
+  // 119: 'Amazon Prime',
+  528: 'Amazon Prime', // US
+  //27: 'HBO',
+  //63: 'Filmin'
 };
 
 const extractBestViewingOption = (offers) => {
+
   const viewingOptionsByProvider = offers.filter(
     offer => justWatchProviders[offer.provider_id] !== undefined && offer.monetization_type === 'flatrate'
   );
@@ -70,7 +75,7 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
       const title_id = possibleItem.id;
 
 
-      return fetch(`http://apis.justwatch.com/content/titles/${content_type}/${title_id}/locale/es_ES`, {
+      return fetch(`http://apis.justwatch.com/content/titles/${content_type}/${title_id}/locale/en_US`, {
         method: 'GET',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -82,12 +87,9 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
         .then((json) => {
 
           const item = json;
-
-          // console.log(item)
           const offers = item.offers || [];
 
           const viewingOptions = extractBestViewingOption(offers)
-
           return viewingOptions
 
         });
@@ -98,4 +100,4 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
 
 // fetchJustWatchData('tt5726616', 'Call Me by Your Name', 'film', 2017).then(res => console.log(res));
 
-module.exports = {fetchJustWatchData}
+module.exports = { fetchJustWatchData }
