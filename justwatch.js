@@ -14,7 +14,7 @@ const findBestPossibleJustwatchResult = (title, year, type, results) => {
   return results.filter((result) => {
 
     const titleMatch = leven(result.title.toLowerCase(), title.toLowerCase());
-    const yearMatch = result.original_release_year === parseInt(year);
+    const yearMatch = result.original_release_year <= parseInt(year) + 3 && result.original_release_year >= parseInt(year) - 3;
     const titleAndYearMatch = titleMatch === 0 && yearMatch;
     const fuzzyTitleAndYearMatch = titleMatch <= 5 && yearMatch;
     const titleMatchesForSeries = titleMatch === 0 && type === 'series' && result.object_type === 'show';
@@ -35,8 +35,8 @@ const justWatchProviders = {
   8: 'Netflix',
   // 119: 'Amazon Prime',
   9: 'Amazon Prime',
-  //27: 'HBO',
-  //63: 'Filmin'
+  384: 'HBO Max',
+  // 63: 'Filmin'
 };
 
 const extractBestViewingOption = (offers) => {
@@ -68,7 +68,7 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
     .then((json) => {
       const possibleItem = findBestPossibleJustwatchResult(title, year, type, json.items);
       if (!possibleItem) {
-        throw Error(`${imdbId}: ${title} was not found at JustWatch`);
+        throw Error(`${imdbId}: ${title}: ${year} was not found at JustWatch`);
       }
 
       const content_type = possibleItem.object_type;
@@ -98,6 +98,6 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
 
 };
 
-// fetchJustWatchData('tt5726616', 'The lord of the rings: the fellowship of the ring', 'film', 2001).then(res => console.log(res));
+// fetchJustWatchData('tt5726616', 'Ema', 'film', 2019).then(res => console.log(res));
 
 module.exports = { fetchJustWatchData }

@@ -7,47 +7,53 @@
 </head>
 
 <body>
-<div class="App">
-	<form action="/" method="POST">
-		<input type="text" class="Search" id="userId" name="userId" placeholder="IMDB user ID"/>
-		<input type="submit" value="Submit" class="Search">
-	</form>
-	
-<div class="MoviesContainer">
-<% if(movies === []){%>
-    <p>No films to show</p>
-<% }else{ %>
+	<div class="App">
+		<form action="/" method="POST">
+			<input type="text" class="Search" id="userId" name="userId" placeholder="IMDB user ID" />
+			<input type="submit" value="Submit" class="Search">
+		</form>
 
-<div class="Title"><%= movies.length %> Films</div>
+		<div class="MoviesContainer">
+			<% if(movies===[]){%>
+				<p>No films to show</p>
+				<% }else{ %>
 
-<% for (var i in movies) { %>
-	<% var movie = movies[i]; %>
-		<a class="MovieCellContainer" href="<%= movie.url%>">
-			<div class="MoviePosterContainer">
-				<img src="<%= movie.poster %>" class="MoviePoster">
-			</div>
-			<div class="MovieInfo">
-				<div class="MovieTitle">
-					<%= movie.title + ' (' + movie.year + ')'%>
-				</div>
-				<div class="MovieYear">
-					<%= movie.viewingOptions[0] %>
-				</div>
-				<div class="MovieYear">
-					Metascore: <%= movie.metascore %>
-				</div>
-				<div class="MovieYear">
-					Runtime: <%= Math.floor(movie.runtime / 60)%>h <%= movie.runtime % 60 %>min
-				</div>
-				<div class="MovieYear">
-					Certificate: <%= movie.certificate %>
-				</div>
-				
-			</div>
-		</a>
-              
-<% }}%>
-</div>	
-</div>
+					<div class="Title">
+						<%= movies.length %> Films
+					</div>
+
+					<% for (var i in movies) { %>
+						<% var movie=movies[i]; %>
+							<a class="MovieCellContainer" href="<%= movie.url%>">
+								<div class="MoviePosterContainer">
+									<img src="<%= movie.poster %>" class="MoviePoster">
+								</div>
+								<div class="MovieInfo">
+									<div class="MovieTitle">
+										<%= movie.title + ' (' + movie.year + ')' %>
+									</div>
+									<div class="MovieYear">
+										<%= movie.viewingOptions[0] %>
+									</div>
+									<div class="MovieYear">
+										<%= movie.viewingOptions[1] %>
+									</div>
+									<div class="MovieYear">
+										Metascore: <%= movie.metascore %>
+									</div>
+									<div class="MovieYear">
+										Runtime: <%= Math.floor(movie.runtime / 60)%>h <%= movie.runtime % 60 %>min
+									</div>
+									<div class="MovieYear">
+										Certificate: <%= movie.certificate %>
+									</div>
+
+								</div>
+							</a>
+
+							<% }}%>
+		</div>
+	</div>
 </body>
+
 </html>
