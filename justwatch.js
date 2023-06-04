@@ -32,27 +32,31 @@ const justwatchType = (itemType) => {
 };
 
 const justWatchProviders = {
-  8: 'Netflix',
-  // 119: 'Amazon Prime',
-  9: 'Amazon Prime',
-  384: 'HBO Max',
-  // 63: 'Filmin'
+  "en_US": {
+    8: 'Netflix US',
+    9: 'Amazon Prime US',
+    384: 'Max US',
+  },
+  "es_ES": {
+    // 119: 'Amazon Prime ES',
+    63: 'Filmin ES'
+  }
 };
 
-const extractBestViewingOption = (offers) => {
+const extractBestViewingOption = (offers, locale) => {
   // console.log(offers)
   const viewingOptionsByProvider = offers.filter(
-    offer => justWatchProviders[offer.provider_id] !== undefined && offer.monetization_type === 'flatrate'
+    offer => justWatchProviders[locale][offer.provider_id] !== undefined && offer.monetization_type === 'flatrate'
   );
 
-  const providers = [...new Set(viewingOptionsByProvider.map(viewingOption => justWatchProviders[viewingOption.provider_id]))]
+  const providers = [...new Set(viewingOptionsByProvider.map(viewingOption => justWatchProviders[locale][viewingOption.provider_id]))]
 
   return providers;
 };
 
-const fetchJustWatchData = (imdbId, title, type, year) => {
+const fetchJustWatchData = (imdbId, title, type, year, locale) => {
 
-  return fetch('http://apis.justwatch.com/content/titles/en_US/popular', {
+  return fetch(`http://apis.justwatch.com/content/titles/${locale}/popular`, {
     method: 'POST',
     body: JSON.stringify({
       content_types: [justwatchType(type)],
@@ -75,7 +79,7 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
       const title_id = possibleItem.id;
 
 
-      return fetch(`http://apis.justwatch.com/content/titles/${content_type}/${title_id}/locale/en_US`, {
+      return fetch(`http://apis.justwatch.com/content/titles/${content_type}/${title_id}/locale/${locale}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -89,7 +93,7 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
           const item = json;
           const offers = item.offers || [];
 
-          const viewingOptions = extractBestViewingOption(offers)
+          const viewingOptions = extractBestViewingOption(offers, locale)
           return viewingOptions
 
         });
@@ -98,6 +102,6 @@ const fetchJustWatchData = (imdbId, title, type, year) => {
 
 };
 
-// fetchJustWatchData('tt5726616', 'Ema', 'film', 2019).then(res => console.log(res));
+// fetchJustWatchData('tt2358891', 'La gran belleza', 'film', 2013, "es_ES").then(res => console.log(res));
 
 module.exports = { fetchJustWatchData }

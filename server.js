@@ -23,32 +23,70 @@ app.get("/", (req, res) => {
 	res.render('index', { movies: [] })
 });
 
+
+// app.post("/", (req, res) => {
+// 	const userId = req.body.userId || 'ur39373174';
+// 	fetchImdbWatchList(userId, locale).then(list => {
+// 		Promise.all(list['movies'].map(
+// 			movie => fetchMovieDetails(movie)))
+// 			.then(justwatchlist => {
+// 				listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
+
+// 				listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
+// 					return (b.metascore || 0) - (a.metascore || 0)
+// 				})
+
+// 				res.render('index', { movies: listWithViewingOptions })
+// 			})
+// 	})
+// 		.catch(err => {
+// 			res.render('index', { movies: [] })
+// 		});
+// });
+
+const locales = ["es_ES", "en_US"]
 app.post("/", (req, res) => {
 	const userId = req.body.userId || 'ur39373174';
-	fetchImdbWatchList(userId).then(list => {
-		Promise.all(list['movies'].map(
-			movie => fetchMovieDetails(movie)))
-			.then(justwatchlist => {
-				listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
+	const fetchPromises = locales.map(locale => fetchImdbWatchList(userId, locale));
+	Promise.all(fetchPromises)
+		.then(results => {
+			const mergedResult = [];
 
-				listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
-					return (b.metascore || 0) - (a.metascore || 0)
+			results.forEach((result, index) => {
+				const locale = locales[index];
+				result.movies.forEach(movie => {
+					movie.locale = locale;
+					mergedResult.push(movie);
+				});
+			});
+
+			return mergedResult;
+		})
+		.then(list => {
+			Promise.all(list.map(
+				movie => fetchMovieDetails(movie)))
+				.then(justwatchlist => {
+					listWithViewingOptions = justwatchlist.filter(item => item.viewingOptions.length > 0)
+
+					listWithViewingOptions = listWithViewingOptions.sort((a, b) => {
+						return (b.metascore || 0) - (a.metascore || 0)
+					})
+
+					res.render('index', { movies: listWithViewingOptions })
 				})
-
-				res.render('index', { movies: listWithViewingOptions })
-			})
-	})
+		})
 		.catch(err => {
 			res.render('index', { movies: [] })
 		});
 });
 
-const fetchMovieDetails = movie =>
+const fetchMovieDetails = (movie) =>
 	fetchJustWatchData(
 		movie.id,
 		movie.title,
 		movie.type,
-		movie.year
+		movie.year,
+		movie.locale
 	)
 		.then(JustWatchData => {
 			return {

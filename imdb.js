@@ -2,7 +2,12 @@ const fetch = require('node-fetch');
 const { handleErrors } = require('./utils');
 const { movieData } = require('./models');
 
-const fetchImdbWatchList = userId =>
+const locale_map = {
+  "en_US": "en-US,en",
+  "es_ES": "es-ES,es",
+}
+
+const fetchImdbWatchList = (userId, locale) =>
   fetch(`http://www.imdb.com/user/${userId}/watchlist?view=detail`)
     .then(response => {
       if (response.status !== 200) {
@@ -22,7 +27,7 @@ const fetchImdbWatchList = userId =>
 
       return fetch(`http://www.imdb.com/title/data?ids=${movieIds.join(',')}`, {
         method: 'GET',
-        headers: { 'Accept-Language': 'en-US,en' },
+        headers: { 'Accept-Language': locale_map[locale] },
       })
         .then(handleErrors)
         .then(response => response.json())
@@ -72,4 +77,4 @@ const calculateMovieRunTime = (imdbMovieData) => {
 //   return
 // });
 
-module.exports = {fetchImdbWatchList}
+module.exports = { fetchImdbWatchList }
