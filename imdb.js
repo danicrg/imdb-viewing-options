@@ -5,6 +5,7 @@ const { movieData } = require('./models');
 const locale_map = {
   "en_US": "en-US,en",
   "es_ES": "es-ES,es",
+  "it_IT": "it-IT,it",
 }
 
 const fetchImdbWatchList = (userId, locale) =>

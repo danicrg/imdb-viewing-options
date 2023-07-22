@@ -40,6 +40,9 @@ const justWatchProviders = {
   "es_ES": {
     // 119: 'Amazon Prime ES',
     63: 'Filmin ES'
+  },
+  "it_IT": {
+    1796: 'Netflix IT',
   }
 };
 
@@ -92,7 +95,6 @@ const fetchJustWatchData = (imdbId, title, type, year, locale) => {
 
           const item = json;
           const offers = item.offers || [];
-
           const viewingOptions = extractBestViewingOption(offers, locale)
           return viewingOptions
 
@@ -102,6 +104,24 @@ const fetchJustWatchData = (imdbId, title, type, year, locale) => {
 
 };
 
-// fetchJustWatchData('tt2358891', 'La gran belleza', 'film', 2013, "es_ES").then(res => console.log(res));
+// fetchJustWatchData('tt2358891', 'La grande belleza', 'film', 2013, "it_IT").then(res => console.log(res));
+
+
+
+const fetchProviders = (locale) => {
+
+  return fetch(`http://apis.justwatch.com/content/providers/locale/${locale}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(handleErrors)
+    .then(response => response.json())
+    .then((json) => { return json })
+}
+
+// fetchProviders('it_IT').then(res => console.log(res));
 
 module.exports = { fetchJustWatchData }
